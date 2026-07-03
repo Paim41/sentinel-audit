@@ -5,11 +5,14 @@ from flask import Flask, render_template
 
 from app.extensions import csrf, db, login_manager
 from app.models import User
-from config import config_by_name
+from config import ON_SERVERLESS, SERVERLESS_INSTANCE_PATH, config_by_name
 
 
 def create_app(config_name="development"):
-    app = Flask(__name__, instance_relative_config=True)
+    flask_kwargs = {"instance_relative_config": True}
+    if ON_SERVERLESS:
+        flask_kwargs["instance_path"] = str(SERVERLESS_INSTANCE_PATH)
+    app = Flask(__name__, **flask_kwargs)
     app.config.from_object(config_by_name.get(config_name, config_by_name["development"]))
     Path(app.instance_path).mkdir(parents=True, exist_ok=True)
     Path(app.config["REPORTS_DIR"]).mkdir(parents=True, exist_ok=True)

@@ -3,7 +3,13 @@ from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent
-ON_VERCEL = bool(os.environ.get("VERCEL"))
+ON_SERVERLESS = bool(
+    os.environ.get("SENTINEL_SERVERLESS")
+    or os.environ.get("VERCEL")
+    or os.environ.get("LAMBDA_TASK_ROOT")
+    or os.environ.get("AWS_LAMBDA_FUNCTION_NAME")
+)
+SERVERLESS_INSTANCE_PATH = Path("/tmp/sentinel-audit-instance")
 
 
 def _bool_env(name, default=False):
@@ -25,7 +31,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URL",
         "sqlite:////tmp/sentinel_audit.db"
-        if ON_VERCEL
+        if ON_SERVERLESS
         else f"sqlite:///{BASE_DIR / 'instance' / 'sentinel_audit.db'}",
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -36,7 +42,7 @@ class Config:
     SESSION_COOKIE_SECURE = False
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_SAMESITE = "Lax"
-    ALLOW_LOCAL_TARGETS = _bool_env("ALLOW_LOCAL_TARGETS", False if ON_VERCEL else True)
+    ALLOW_LOCAL_TARGETS = _bool_env("ALLOW_LOCAL_TARGETS", False if ON_SERVERLESS else True)
     ALLOWED_DOMAINS = [
         item.strip().lower()
         for item in os.environ.get("ALLOWED_DOMAINS", "").split(",")
@@ -48,7 +54,12 @@ class Config:
     MAX_RESPONSE_BYTES = _int_env("MAX_RESPONSE_BYTES", 2 * 1024 * 1024)
     SCAN_RATE_LIMIT = _int_env("SCAN_RATE_LIMIT", 5)
     SCAN_RATE_WINDOW_MINUTES = _int_env("SCAN_RATE_WINDOW_MINUTES", 10)
-    REPORTS_DIR = Path(os.environ.get("REPORTS_DIR", "/tmp/sentinel-audit-reports" if ON_VERCEL else BASE_DIR / "reports"))
+    REPORTS_DIR = Path(
+        os.environ.get(
+            "REPORTS_DIR",
+            "/tmp/sentinel-audit-reports" if ON_SERVERLESS else BASE_DIR / "reports",
+        )
+    )
 
 
 class DevelopmentConfig(Config):
