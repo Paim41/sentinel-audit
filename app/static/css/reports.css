@@ -1,0 +1,24 @@
+.print-body {
+  background: #fff;
+  color: #15181b;
+  font-family: "Times New Roman", Times, serif;
+}
+.print-report {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 2rem;
+}
+.print-report h1, .print-report h2, .print-report h3 { color: #15181b; }
+.print-report article {
+  border-top: 1px solid #d9dcdf;
+  padding: 1rem 0;
+}
+.print-report footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #15181b;
+}
+@media print {
+  .print-report { padding: 0; }
+  a { color: #15181b; }
+}

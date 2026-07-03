@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block content %}
+<section class="hero-panel">
+  <div>
+    <span class="section-label">Authorised educational testing</span>
+    <h2>Welcome, {{ current_user.full_name }}</h2>
+    <p>Run limited, non-destructive configuration checks and track security posture changes over time.</p>
+  </div>
+  <div class="hero-actions">
+    <a class="button button-primary" href="{{ url_for('scans.new') }}">{{ icons.icon('scan') }} Start New Scan</a>
+    <a class="button button-secondary" href="{{ url_for('reports.index') }}">{{ icons.icon('report') }} View Reports</a>
+  </div>
+</section>
+
+<section class="stat-grid">
+  <article class="stat-card">{{ icons.icon('database', 28) }}<strong>{{ total_scans }}</strong><span>Total scans</span><small>Stored in SQLite</small></article>
+  <article class="stat-card">{{ icons.icon('shield', 28) }}<strong>{{ average_score }}</strong><span>Average security score</span><small>Across completed scans</small></article>
+  <article class="stat-card">{{ icons.icon('alert', 28) }}<strong>{{ high_risk_findings }}</strong><span>High-risk findings</span><small>Critical and high severity</small></article>
+  <article class="stat-card">{{ icons.icon('check', 28) }}<strong>{{ resolved_findings }}</strong><span>Resolved findings</span><small>Passed checks observed</small></article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel chart-panel">
+    <div class="panel-heading"><span class="section-label">Recent scores</span><h3>Security Score Trend</h3></div>
+    <canvas id="scoreChart" data-labels='{{ score_labels|tojson }}' data-values='{{ score_values|tojson }}'></canvas>
+  </article>
+  <article class="panel chart-panel">
+    <div class="panel-heading"><span class="section-label">Findings</span><h3>Risk Distribution</h3></div>
+    <canvas id="riskChart" data-values='{{ risk_counts|tojson }}'></canvas>
+  </article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel">
+    <div class="panel-heading"><span class="section-label">Overview</span><h3>Security Overview</h3></div>
+    <div class="overview-grid">
+      <span><strong>{{ overview.passed }}</strong> Passed</span>
+      <span><strong>{{ overview.failed }}</strong> Failed</span>
+      <span><strong>{{ overview.warning }}</strong> Warnings</span>
+      <span><strong>{{ overview.info }}</strong> Informational</span>
+    </div>
+  </article>
+  <article class="panel">
+    <div class="panel-heading"><span class="section-label">Latest activity</span><h3>Recent Scans</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Target</th><th>Date</th><th>Score</th><th>Risk level</th><th>Findings</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for scan in scans %}
+          <tr>
+            <td data-label="Target">{{ scan.target_host }}</td>
+            <td data-label="Date">{{ scan.started_at.strftime('%Y-%m-%d') }}</td>
+            <td data-label="Score">{{ scan.security_score }}</td>
+            <td data-label="Risk level">{{ scan.risk_level }}</td>
+            <td data-label="Findings">{{ scan.findings|length }}</td>
+            <td data-label="Status"><span class="badge badge-{{ scan.status }}">{{ scan.status|title }}</span></td>
+            <td data-label="Action"><a class="button button-small" href="{{ url_for('scans.results', scan_id=scan.id) }}">View Results</a></td>
+          </tr>
+        {% else %}
+          <tr><td colspan="7">No scans yet. Start a new scan when you are ready.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+{% endblock %}

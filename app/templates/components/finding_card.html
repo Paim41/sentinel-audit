@@ -1,0 +1,23 @@
+{% import "components/svg_macros.html" as icons %}
+<article class="finding-card" data-severity="{{ finding.severity }}" data-status="{{ finding.status }}">
+  <button class="finding-toggle" type="button" aria-expanded="false">
+    <span class="finding-icon status-{{ finding.status }}">
+      {% if finding.status == 'passed' %}{{ icons.icon('check') }}{% elif finding.status == 'failed' %}{{ icons.icon('x') }}{% elif finding.status == 'warning' %}{{ icons.icon('alert') }}{% else %}{{ icons.icon('info') }}{% endif %}
+    </span>
+    <span class="finding-title-group">
+      <strong>{{ finding.title }}</strong>
+      <span>{{ finding.category }}</span>
+    </span>
+    <span class="badge badge-{{ finding.severity }}">{{ finding.severity|title }}</span>
+    <span class="chevron">{{ icons.icon('chevron') }}</span>
+  </button>
+  <div class="finding-body">
+    <p>{{ finding.description }}</p>
+    <dl>
+      <dt>Evidence</dt>
+      <dd>{{ finding.evidence }}</dd>
+      <dt>Recommendation</dt>
+      <dd>{{ finding.recommendation }}</dd>
+    </dl>
+  </div>
+</article>

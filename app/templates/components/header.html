@@ -1,0 +1,12 @@
+{% import "components/svg_macros.html" as icons %}
+<header class="topbar">
+  <button class="icon-button mobile-menu-button" id="mobileMenuButton" aria-label="Open navigation drawer" aria-controls="sidebar" aria-expanded="false">{{ icons.icon('menu') }}</button>
+  <div>
+    <span class="page-label">Sentinel Audit</span>
+    <h1>{{ title or "Dashboard" }}</h1>
+  </div>
+  <div class="user-menu">
+    <span class="user-avatar">{{ icons.icon('user') }}</span>
+    <span>{{ current_user.full_name }}</span>
+  </div>
+</header>

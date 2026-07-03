@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+{% set previous = comparison.previous %}
+{% set current = comparison.current %}
+<section class="results-header">
+  <div>
+    <span class="section-label">Scan comparison</span>
+    <h2>{{ current.target_host }}</h2>
+    <p>Previous Score: {{ previous.security_score }} | Current Score: {{ current.security_score }} | Improvement: {{ '%+d'|format(comparison.score_difference) }}</p>
+  </div>
+  <div class="comparison-delta {{ 'positive' if comparison.score_difference >= 0 else 'negative' }}">{{ '%+d'|format(comparison.score_difference) }}</div>
+</section>
+<section class="panel chart-panel">
+  <canvas id="comparisonChart" data-previous="{{ previous.security_score }}" data-current="{{ current.security_score }}"></canvas>
+</section>
+<section class="comparison-grid">
+  <article class="panel"><h3>Risk levels</h3><p>Previous: {{ previous.risk_level }}</p><p>Current: {{ current.risk_level }}</p></article>
+  <article class="panel"><h3>New findings</h3><strong>{{ comparison.new_findings|length }}</strong></article>
+  <article class="panel"><h3>Resolved findings</h3><strong>{{ comparison.resolved_findings|length }}</strong></article>
+  <article class="panel"><h3>Unchanged findings</h3><strong>{{ comparison.unchanged_findings|length }}</strong></article>
+</section>
+<section class="dashboard-grid">
+  <article class="panel"><h3>Improved categories</h3>{% for category, count in comparison.improved_categories %}<p class="positive">{{ category }}: {{ count }}</p>{% else %}<p>No category improvements detected.</p>{% endfor %}</article>
+  <article class="panel"><h3>Regressed categories</h3>{% for category, count in comparison.regressed_categories %}<p class="negative">{{ category }}: {{ count }}</p>{% else %}<p>No category regressions detected.</p>{% endfor %}</article>
+</section>
+{% endblock %}

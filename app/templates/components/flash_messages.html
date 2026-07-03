@@ -1,0 +1,13 @@
+{% import "components/svg_macros.html" as icons %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <section class="flash-stack" aria-live="polite">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ icons.icon('info') }}
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    </section>
+  {% endif %}
+{% endwith %}

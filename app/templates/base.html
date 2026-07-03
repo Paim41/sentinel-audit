@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "Sentinel Audit" }} | Sentinel Audit</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/scanner.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+</head>
+<body>
+{% if current_user.is_authenticated %}
+  {% include "components/sidebar.html" %}
+  <main class="app-main">
+    {% include "components/header.html" %}
+    {% include "components/flash_messages.html" %}
+    <div class="content-shell">{% block content %}{% endblock %}</div>
+  </main>
+{% else %}
+  <main class="auth-main">
+    {% include "components/flash_messages.html" %}
+    {% block auth_content %}{% endblock %}
+  </main>
+{% endif %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scan-form.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scan-progress.js') }}"></script>
+<script src="{{ url_for('static', filename='js/findings-filter.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comparison.js') }}"></script>
+</body>
+</html>

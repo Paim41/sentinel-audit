@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block content %}
+<section class="results-header">
+  <div>
+    <span class="section-label">Scan results</span>
+    <h2>{{ scan.display_name }}</h2>
+    <p>{{ scan.target_url }}</p>
+    <dl class="meta-grid">
+      <div><dt>Target host</dt><dd>{{ scan.target_host }}</dd></div>
+      <div><dt>Scan date</dt><dd>{{ scan.started_at.strftime('%Y-%m-%d %H:%M') }}</dd></div>
+      <div><dt>Duration</dt><dd>{{ '%.2f'|format(scan.duration_seconds or 0) }}s</dd></div>
+      <div><dt>Profile</dt><dd>{{ scan.scan_profile|title }}</dd></div>
+      <div><dt>Final destination</dt><dd>{{ scan.final_url or 'Not recorded' }}</dd></div>
+    </dl>
+  </div>
+  <div class="score-ring score-{{ 'strong' if scan.security_score >= 75 else 'moderate' if scan.security_score >= 50 else 'weak' }}" style="--score: {{ scan.security_score }}%">
+    <span>{{ scan.security_score }}</span><small>{{ scan.risk_level }}</small>
+  </div>
+</section>
+
+<section class="summary-grid">
+  <article>{{ icons.icon('check') }}<strong>{{ scan.count_status('passed') }}</strong><span>Passed checks</span></article>
+  <article>{{ icons.icon('x') }}<strong>{{ scan.count_status('failed') }}</strong><span>Failed checks</span></article>
+  <article>{{ icons.icon('alert') }}<strong>{{ scan.count_status('warning') }}</strong><span>Warnings</span></article>
+  <article>{{ icons.icon('info') }}<strong>{{ scan.count_status('info') }}</strong><span>Informational checks</span></article>
+</section>
+
+<section class="action-row">
+  <a class="button button-primary" href="{{ url_for('reports.download', scan_id=scan.id) }}">{{ icons.icon('download') }} Download PDF</a>
+  <a class="button button-secondary" href="{{ url_for('reports.printable', scan_id=scan.id) }}">{{ icons.icon('report') }} Print Report</a>
+  {% if previous %}<a class="button button-secondary" href="{{ url_for('scans.compare', scan_id=scan.id) }}">{{ icons.icon('history') }} Compare Scan</a>{% endif %}
+  <a class="button button-secondary" href="{{ url_for('scans.new') }}">{{ icons.icon('scan') }} Start New Scan</a>
+  <a class="button button-secondary" href="{{ url_for('dashboard.index') }}">{{ icons.icon('dashboard') }} Return to Dashboard</a>
+</section>
+
+<section class="panel">
+  <div class="panel-heading"><span class="section-label">Technical details</span><h3>Response Summary</h3></div>
+  <dl class="technical-grid">
+    <div><dt>HTTP status code</dt><dd>{{ scan.http_status or 'Unknown' }}</dd></div>
+    <div><dt>Final URL</dt><dd>{{ scan.final_url or 'Unknown' }}</dd></div>
+    <div><dt>Content type</dt><dd>{{ metrics.get('content_type', 'unknown') }}</dd></div>
+    <div><dt>Server response time</dt><dd>{{ scan.response_time or 0 }}s</dd></div>
+    <div><dt>Redirect count</dt><dd>{{ scan.redirect_count or 0 }}</dd></div>
+    <div><dt>TLS certificate summary</dt><dd>{{ metrics.get('tls_expiry', 'Not recorded') }}</dd></div>
+    <div><dt>Number of forms</dt><dd>{{ metrics.get('form_count', '0') }}</dd></div>
+    <div><dt>Number of cookies</dt><dd>{{ metrics.get('cookie_count', '0') }}</dd></div>
+    <div><dt>Headers checked</dt><dd>{{ metrics.get('headers_checked', '0') }}</dd></div>
+  </dl>
+</section>
+
+<section class="panel">
+  <div class="panel-heading"><span class="section-label">Findings</span><h3>Review Results</h3></div>
+  <div class="filter-bar" data-filter-bar>
+    {% for value, label in [('all','All'),('critical','Critical'),('high','High'),('medium','Medium'),('low','Low'),('info','Informational'),('passed','Passed')] %}
+      <button class="filter-button {{ 'active' if value == 'all' }}" type="button" data-filter="{{ value }}">{{ label }}</button>
+    {% endfor %}
+  </div>
+  <div class="findings-list">
+    {% for finding in scan.findings %}
+      {% include "components/finding_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

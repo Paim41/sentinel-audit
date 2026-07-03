@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block auth_content %}
+<section class="auth-card wide">
+  <div class="auth-brand">{{ icons.icon('shield', 34) }}<span><strong>Sentinel Audit</strong><small>Web Security Auditor</small></span></div>
+  <h1>Create account</h1>
+  <p>Use Sentinel Audit only for websites you own or are authorised to test.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="form-grid two">
+      <label>{{ form.full_name.label }}{{ form.full_name(class="input", autocomplete="name") }}</label>
+      <label>{{ form.username.label }}{{ form.username(class="input", autocomplete="username") }}</label>
+      <label>{{ form.email.label }}{{ form.email(class="input", autocomplete="email") }}</label>
+      <label>{{ form.password.label }}{{ form.password(class="input", autocomplete="new-password") }}</label>
+      <label>{{ form.confirm_password.label }}{{ form.confirm_password(class="input", autocomplete="new-password") }}</label>
+    </div>
+    {{ form.submit(class="button button-primary full") }}
+  </form>
+  <p class="auth-link">Already registered? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+</section>
+{% endblock %}

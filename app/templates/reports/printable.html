@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentinel Audit Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+</head>
+<body class="print-body">
+  <main class="print-report">
+    <h1>Sentinel Audit</h1>
+    <p>Educational Web Security Audit Report</p>
+    <section><h2>{{ scan.display_name }}</h2><p>{{ scan.target_url }}</p><p>Score: {{ scan.security_score }} | Risk level: {{ scan.risk_level }}</p></section>
+    <section><h2>Technical details</h2><p>Final URL: {{ scan.final_url }}</p><p>HTTP status: {{ scan.http_status }}</p><p>Content type: {{ metrics.get('content_type', 'unknown') }}</p></section>
+    <section><h2>Findings</h2>{% for finding in scan.findings %}<article><h3>{{ finding.title }}</h3><p>{{ finding.severity|title }} | {{ finding.status|title }} | {{ finding.category }}</p><p>{{ finding.description }}</p><p><strong>Evidence:</strong> {{ finding.evidence }}</p><p><strong>Recommendation:</strong> {{ finding.recommendation }}</p></article>{% endfor %}</section>
+    <footer>Sentinel Audit performs limited, non-destructive configuration checks. It is not a replacement for a professional penetration test, compliance audit, or manual security assessment.</footer>
+  </main>
+</body>
+</html>

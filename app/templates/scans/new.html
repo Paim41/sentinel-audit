@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block content %}
+<section class="scan-layout">
+  <article class="panel scan-form-panel">
+    <div class="panel-heading"><span class="section-label">New assessment</span><h2>Start a Safe Scan</h2></div>
+    <form method="post" id="scanForm" novalidate>
+      {{ form.hidden_tag() }}
+      <label>{{ form.target_url.label }}{{ form.target_url(class="input", placeholder="https://example.com") }}</label>
+      <label>{{ form.scan_name.label }}{{ form.scan_name(class="input", placeholder="Quarterly external review") }}</label>
+      <label>{{ form.scan_profile.label }}{{ form.scan_profile(class="input") }}</label>
+      <label class="check-row">{{ form.authorised() }} <span>{{ form.authorised.label.text }}</span></label>
+      {{ form.submit(class="button button-primary full", id="scanSubmit") }}
+    </form>
+  </article>
+  <aside class="panel info-panel">
+    <div class="panel-heading"><span class="section-label">Boundaries</span><h3>Non-destructive scanner</h3></div>
+    <ul class="clean-list">
+      <li>{{ icons.icon('check') }} Performs limited configuration checks</li>
+      <li>{{ icons.icon('x') }} Does not exploit vulnerabilities</li>
+      <li>{{ icons.icon('x') }} Does not submit website forms</li>
+      <li>{{ icons.icon('x') }} Does not attempt authentication</li>
+      <li>{{ icons.icon('x') }} Does not perform brute-force attacks</li>
+      <li>{{ icons.icon('clock') }} Uses request limits and timeouts</li>
+    </ul>
+    <p class="disclaimer">Sentinel Audit performs limited, non-destructive configuration checks. It is not a replacement for a professional penetration test, compliance audit, or manual security assessment.</p>
+  </aside>
+</section>
+<section class="loading-overlay" id="scanLoading" aria-hidden="true">
+  <div class="loading-panel">
+    <span class="rotating-shield">{{ icons.icon('shield', 42) }}</span>
+    <h2>Scanning target</h2>
+    <p id="scanStage">Validating target</p>
+    <div class="progress-track"><span id="scanProgress"></span></div>
+    <p class="muted" id="scanHost">Preparing hostname</p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,117 @@
+.panel, .hero-panel, .stat-card, .summary-grid article {
+  background: rgba(27, 31, 34, 0.82);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+.panel { padding: 1.25rem; }
+.panel:hover, .stat-card:hover { border-color: rgba(183, 255, 60, 0.38); }
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 42px;
+  padding: 0.72rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--soft-gray-100);
+  background: var(--charcoal-800);
+  cursor: pointer;
+  transition: transform .2s, border-color .2s, background .2s;
+}
+.button:hover { transform: translateY(-1px); border-color: var(--lime-primary); }
+.button-primary { background: var(--lime-primary); color: var(--charcoal-950); border-color: var(--lime-primary); }
+.button-secondary { background: transparent; }
+.button-danger { background: rgba(255, 98, 98, 0.12); color: var(--danger); border-color: rgba(255, 98, 98, 0.45); }
+.button-small { min-height: 34px; padding: 0.4rem 0.7rem; border-radius: 10px; }
+.icon-button, .link-button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.icon-button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.full { width: 100%; }
+.input {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.35rem;
+  padding: 0.72rem 0.82rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--charcoal-950);
+  color: var(--soft-gray-100);
+}
+label { display: grid; gap: 0.15rem; color: var(--soft-gray-200); margin-bottom: 0.95rem; }
+.form-grid.two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.check-row { display: flex; align-items: flex-start; gap: 0.7rem; }
+.check-row input { margin-top: 0.25rem; accent-color: var(--lime-primary); }
+.flash-stack { position: fixed; top: 1rem; right: 1rem; z-index: 60; display: grid; gap: 0.5rem; }
+.flash {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: var(--charcoal-800);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.flash-success { color: var(--success); }
+.flash-danger { color: var(--danger); }
+.flash-warning { color: var(--warning); }
+.flash-info { color: var(--info); }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  border: 1px solid var(--border);
+  color: var(--soft-gray-200);
+  white-space: nowrap;
+}
+.badge-critical, .badge-high, .badge-failed { color: var(--danger); border-color: rgba(255,98,98,.45); }
+.badge-medium, .badge-warning { color: var(--warning); border-color: rgba(255,200,87,.45); }
+.badge-low, .badge-info { color: var(--info); border-color: rgba(101,186,255,.4); }
+.badge-passed, .badge-completed { color: var(--lime-primary); border-color: rgba(183,255,60,.45); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { padding: 0.9rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { color: var(--soft-gray-100); font-size: 0.78rem; text-transform: uppercase; }
+.table-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.table-actions a, .link-button { color: var(--lime-primary); text-decoration: underline; text-underline-offset: 3px; }
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.68);
+  z-index: 80;
+}
+.modal.open { display: grid; }
+.modal-panel {
+  width: min(460px, 100%);
+  padding: 1.4rem;
+  background: var(--charcoal-850);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.modal-actions { display: flex; justify-content: flex-end; gap: 0.75rem; }

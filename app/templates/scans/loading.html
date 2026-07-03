@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block content %}
+<section class="panel loading-inline">
+  <span class="rotating-shield">{{ icons.icon('shield', 48) }}</span>
+  <h2>Scan in progress</h2>
+  <p>The backend scan runs synchronously for reliability. Keep this page open while the request completes.</p>
+  <div class="progress-track"><span></span></div>
+</section>
+{% endblock %}

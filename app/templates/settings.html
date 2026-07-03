@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="settings-grid">
+  <article class="panel">
+    <div class="panel-heading"><span class="section-label">Preferences</span><h2>Settings</h2></div>
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <label>{{ form.default_scan_profile.label }}{{ form.default_scan_profile(class="input") }}</label>
+      <label>{{ form.request_timeout.label }}{{ form.request_timeout(class="input", readonly=true) }}</label>
+      <label>{{ form.maximum_redirects.label }}{{ form.maximum_redirects(class="input", readonly=true) }}</label>
+      <label>{{ form.pdf_preference.label }}{{ form.pdf_preference(class="input") }}</label>
+      {{ form.submit(class="button button-primary") }}
+    </form>
+  </article>
+  <article class="panel">
+    <div class="panel-heading"><span class="section-label">Server controlled</span><h3>Audit Boundaries</h3></div>
+    <dl class="technical-grid">
+      <div><dt>Local laboratory mode</dt><dd>{{ 'Enabled' if allow_local_targets else 'Disabled' }}</dd></div>
+      <div><dt>Allowed domains</dt><dd>{{ allowed_domains|join(', ') if allowed_domains else 'No allowlist configured' }}</dd></div>
+      <div><dt>Account</dt><dd>{{ current_user.email }}</dd></div>
+    </dl>
+    <p class="disclaimer">Dangerous server-level security settings are displayed read-only for ordinary users.</p>
+  </article>
+</section>
+{% endblock %}

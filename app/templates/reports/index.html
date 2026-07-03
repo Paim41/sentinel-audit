@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block content %}
+<section class="panel">
+  <div class="panel-heading"><span class="section-label">Printable archive</span><h2>Reports</h2></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Report title</th><th>Target</th><th>Creation date</th><th>Score</th><th>Risk level</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for scan in scans %}
+        <tr>
+          <td data-label="Report title">{{ scan.display_name }}</td>
+          <td data-label="Target">{{ scan.target_host }}</td>
+          <td data-label="Creation date">{{ scan.started_at.strftime('%Y-%m-%d') }}</td>
+          <td data-label="Score">{{ scan.security_score }}</td>
+          <td data-label="Risk level">{{ scan.risk_level }}</td>
+          <td data-label="Actions" class="table-actions">
+            <a href="{{ url_for('reports.download', scan_id=scan.id) }}">{{ icons.icon('download') }} Download</a>
+            <a href="{{ url_for('scans.results', scan_id=scan.id) }}">View</a>
+            <a href="{{ url_for('reports.printable', scan_id=scan.id) }}">Print</a>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6">No reports are available yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

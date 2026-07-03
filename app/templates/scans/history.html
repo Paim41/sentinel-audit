@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% import "components/svg_macros.html" as icons %}
+{% block content %}
+<section class="panel">
+  <div class="panel-heading"><span class="section-label">Searchable archive</span><h2>Scan History</h2></div>
+  <form class="filter-form" method="get">
+    <label>Target search<input class="input" name="q" value="{{ request.args.get('q','') }}"></label>
+    <label>Risk level<select class="input" name="risk"><option value="">All</option>{% for risk in ['Excellent','Good','Needs Improvement','High Risk','Critical Risk'] %}<option value="{{ risk }}" {{ 'selected' if request.args.get('risk') == risk }}>{{ risk }}</option>{% endfor %}</select></label>
+    <label>Scan profile<select class="input" name="profile"><option value="">All</option><option value="quick">Quick</option><option value="standard">Standard</option></select></label>
+    <label>Date<input class="input" name="date" type="date" value="{{ request.args.get('date','') }}"></label>
+    <label>Score min<input class="input" name="score_min" type="number" min="0" max="100" value="{{ request.args.get('score_min','') }}"></label>
+    <label>Score max<input class="input" name="score_max" type="number" min="0" max="100" value="{{ request.args.get('score_max','') }}"></label>
+    <button class="button button-primary" type="submit">{{ icons.icon('search') }} Filter</button>
+  </form>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Scan name</th><th>Target</th><th>Date</th><th>Score</th><th>Risk level</th><th>Total findings</th><th>Duration</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for scan in scans %}
+        <tr>
+          <td data-label="Scan name">{{ scan.display_name }}</td>
+          <td data-label="Target">{{ scan.target_host }}</td>
+          <td data-label="Date">{{ scan.started_at.strftime('%Y-%m-%d') }}</td>
+          <td data-label="Score">{{ scan.security_score }}</td>
+          <td data-label="Risk level">{{ scan.risk_level }}</td>
+          <td data-label="Total findings">{{ scan.findings|length }}</td>
+          <td data-label="Duration">{{ '%.2f'|format(scan.duration_seconds or 0) }}s</td>
+          <td data-label="Actions" class="table-actions">
+            <a href="{{ url_for('scans.results', scan_id=scan.id) }}">View</a>
+            <a href="{{ url_for('scans.compare', scan_id=scan.id) }}">Compare</a>
+            <a href="{{ url_for('reports.download', scan_id=scan.id) }}">PDF</a>
+            <button class="link-button" type="button" data-delete-open data-delete-id="{{ scan.id }}" data-delete-name="{{ scan.display_name }}">Delete</button>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="8">No scans match the current filters.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+<div class="modal" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteTitle" aria-hidden="true">
+  <div class="modal-panel">
+    <h2 id="deleteTitle">Delete scan</h2>
+    <p id="deleteMessage">This scan will be permanently deleted.</p>
+    <form method="post" id="deleteForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="modal-actions">
+        <button class="button button-danger" type="submit">Delete</button>
+        <button class="button button-secondary" type="button" data-modal-close>Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

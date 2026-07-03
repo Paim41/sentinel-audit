@@ -1,0 +1,16 @@
+{% import "components/svg_macros.html" as icons %}
+<aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+  <div class="sidebar-brand">
+    <span class="brand-logo">{{ icons.icon('shield', 28) }}</span>
+    <span><strong>Sentinel Audit</strong><small>Web Security Auditor</small></span>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="{{ 'active' if request.endpoint == 'dashboard.index' }}" href="{{ url_for('dashboard.index') }}">{{ icons.icon('dashboard') }} Dashboard</a>
+    <a class="{{ 'active' if request.endpoint == 'scans.new' }}" href="{{ url_for('scans.new') }}">{{ icons.icon('scan') }} New Scan</a>
+    <a class="{{ 'active' if request.endpoint == 'scans.history' }}" href="{{ url_for('scans.history') }}">{{ icons.icon('history') }} Scan History</a>
+    <a class="{{ 'active' if request.endpoint == 'reports.index' }}" href="{{ url_for('reports.index') }}">{{ icons.icon('report') }} Reports</a>
+    <a class="{{ 'active' if request.endpoint == 'dashboard.settings' }}" href="{{ url_for('dashboard.settings') }}">{{ icons.icon('settings') }} Settings</a>
+    <a href="{{ url_for('auth.logout') }}">{{ icons.icon('logout') }} Logout</a>
+  </nav>
+</aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
