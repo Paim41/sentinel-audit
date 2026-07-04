@@ -86,8 +86,8 @@
   z-index: 20;
 }
 .topbar-logo {
-  width: min(230px, 26vw);
-  height: 46px;
+  width: min(360px, 34vw);
+  height: 72px;
   object-fit: contain;
   opacity: 0.9;
 }
